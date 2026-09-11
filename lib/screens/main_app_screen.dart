@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:islamic_app/color.dart';
-import 'package:islamic_app/screens/azkar_screen.dart';
+import 'package:islamic_app/screens/azkar/azkar_screen.dart';
 import 'package:islamic_app/screens/home_screen.dart';
 import 'package:islamic_app/screens/quran_screen.dart';
 import 'package:islamic_app/screens/tasbih_screen.dart';
