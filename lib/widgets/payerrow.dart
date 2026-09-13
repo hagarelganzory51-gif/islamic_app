@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:islamic_app/services/notification_service.dart';
 
 class PrayerRow extends StatefulWidget {
   final IconData icon;
@@ -26,6 +27,30 @@ class _PrayerRowState extends State<PrayerRow> {
   void initState() {
     super.initState();
     isNotificationOn = widget.notification;
+  }
+  int get notificationId {
+    switch (widget.name) {
+      case 'Fajr':
+        return 1;
+
+      case 'Sunrise':
+        return 2;
+
+      case 'Dhuhr':
+        return 3;
+
+      case 'Asr':
+        return 4;
+
+      case 'Maghrib':
+        return 5;
+
+      case 'Isha':
+        return 6;
+
+      default:
+        return 100;
+    }
   }
 
   @override
@@ -59,10 +84,22 @@ class _PrayerRowState extends State<PrayerRow> {
 
         Switch(
           value: isNotificationOn,
-          onChanged: (value) {
+          onChanged: (value) async {
             setState(() {
               isNotificationOn = value;
             });
+             if (value) {
+              await NotificationService.schedulePrayerNotification(
+                id: notificationId,
+                prayerName: widget.name,
+                prayerTime: widget.time,
+              );
+            } else {
+              await NotificationService.cancelPrayerNotification(
+                notificationId,
+              );
+            }
+
           },
         ),
       ],

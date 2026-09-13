@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 
 import 'package:islamic_app/screens/splash_screen.dart';
+import 'package:islamic_app/services/notification_service.dart';
 
-void main() {
+Future<void> main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
   runApp(
     DevicePreview(
       enabled: true,
