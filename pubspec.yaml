@@ -17,6 +17,7 @@ dependencies:
   flutter_svg: ^2.3.0
   intl: ^0.20.2
   quran_pages_with_ayah_detector: ^1.2.2
+  prayer_times_calculation: ^1.0.2
   
 dev_dependencies:
   flutter_test:
