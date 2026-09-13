@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:islamic_app/services/local_storage.dart';
 import 'package:islamic_app/services/notification_service.dart';
 
 class PrayerRow extends StatefulWidget {
@@ -26,8 +26,23 @@ class _PrayerRowState extends State<PrayerRow> {
   @override
   void initState() {
     super.initState();
+
     isNotificationOn = widget.notification;
+
+    loadNotification();
   }
+
+  Future<void> loadNotification() async {
+    final savedValue =
+        await LocalStorageService.getPrayerNotification(
+      widget.name,
+    );
+
+    setState(() {
+      isNotificationOn = savedValue;
+    });
+  }
+
   int get notificationId {
     switch (widget.name) {
       case 'Fajr':
@@ -88,7 +103,13 @@ class _PrayerRowState extends State<PrayerRow> {
             setState(() {
               isNotificationOn = value;
             });
-             if (value) {
+
+            await LocalStorageService.savePrayerNotification(
+              widget.name,
+              value,
+            );
+
+            if (value) {
               await NotificationService.schedulePrayerNotification(
                 id: notificationId,
                 prayerName: widget.name,
@@ -99,11 +120,9 @@ class _PrayerRowState extends State<PrayerRow> {
                 notificationId,
               );
             }
-
           },
         ),
       ],
     );
   }
 }
-
