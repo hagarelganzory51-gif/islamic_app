@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran_pages_with_ayah_detector/quran_pages_with_ayah_detector.dart';
+import 'package:flutter/services.dart';
 
-class QuranReaderScreen extends StatelessWidget {
+class QuranReaderScreen extends StatefulWidget {
   const QuranReaderScreen({
     super.key,
     required this.surahName,
@@ -10,6 +10,40 @@ class QuranReaderScreen extends StatelessWidget {
 
   final String surahName;
   final int pageNumber;
+
+  @override
+  State<QuranReaderScreen> createState() => _QuranReaderScreenState();
+}
+
+class _QuranReaderScreenState extends State<QuranReaderScreen> {
+  String content = '';
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadQuranPage();
+  }
+
+  Future<void> loadQuranPage() async {
+    try {
+      String text = await rootBundle.loadString(
+        'assets/files/${widget.pageNumber}.txt',
+      );
+
+      setState(() {
+        content = text;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        content = 'error';
+        isLoading = false;
+      });
+
+      debugPrint('Quran Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +56,7 @@ class QuranReaderScreen extends StatelessWidget {
         centerTitle: true,
 
         title: Text(
-          surahName,
+          widget.surahName,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
@@ -35,15 +69,27 @@ class QuranReaderScreen extends StatelessWidget {
         ),
       ),
 
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-
-        child: QuranPageView(
-          pageImagePath: 'assets/pages/',
-        ),
-      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Colors.amber,
+              ),
+            )
+          : Directionality(
+              textDirection: TextDirection.rtl,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  content,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    height: 2,
+                  ),
+                ),
+              ),
+            ),
     );
   }
 }
-
