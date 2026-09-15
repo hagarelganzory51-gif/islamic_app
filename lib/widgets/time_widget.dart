@@ -25,10 +25,10 @@ class _TimeWidgetState extends State<TimeWidget> {
     );
 
     final prayerTimes = PrayerTimesSDK(
-      30.0444,
-      31.2357,
+       30.0444,
+        31.2357,
       DateTime.now(),
-      2.0,
+     3.0,
       options,
     );
 
